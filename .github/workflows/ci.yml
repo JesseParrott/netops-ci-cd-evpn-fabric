@@ -1,0 +1,25 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  lint_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Ansible & Linting Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install ansible ansible-lint yamllint
+
+      - name: YAML Lint
+        run: yamllint .
+
+      - name: Ansible Lint
+        run: ansible-lint playbook.yml
+
+      - name: Ansible Syntax Check
+        run: ansible-playbook --syntax-check playbook.yml
