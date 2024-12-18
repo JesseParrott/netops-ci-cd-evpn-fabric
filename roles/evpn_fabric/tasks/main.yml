@@ -1,0 +1,36 @@
+---
+- name: Configure Underlay BGP
+  ios_config:
+    lines:
+      - "router bgp {{ underlay_as }}"
+      - "router-id {{ loopback_range }}{{ bgp_router_id_loopback }}"
+    parents: []
+  register: bgp_result
+
+- name: Configure EVPN BGP
+  ios_config:
+    lines:
+      - "router bgp {{ evpn_as }}"
+      - "router-id {{ loopback_range }}{{ bgp_router_id_loopback }}"
+      - "address-family l2vpn evpn"
+      - "{% for rr in evpn_rrs %}route-reflector-client {{ rr}}\n{% endfor %}"
+    parents: []
+  when: "'spines' in group_names or 'leafs' in group_names"
+
+- name: Configure VLANs
+  template:
+    src: vlan_config.j2
+    dest: flash:/vlan_config.cfg
+  notify: apply_config
+
+- name: Configure BGP EVPN and NVE
+  template:
+    src: bgp_config.j2
+    dest: flash:/bgp_config.cfg
+  notify: apply_config
+
+- name: Configure NVE Interface
+  template:
+    src: nve_config.j2
+    dest: flash:/nve_config.cfg
+  notify: apply_config
