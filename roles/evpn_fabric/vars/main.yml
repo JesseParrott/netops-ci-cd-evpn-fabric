@@ -1,0 +1,8 @@
+# Common variables for EVPN fabric
+evpn_rrs: 
+  - "192.168.255.1"
+  - "192.168.255.2"
+
+bgp_router_id_loopback: 0
+
+nve_source_loopback: 1
