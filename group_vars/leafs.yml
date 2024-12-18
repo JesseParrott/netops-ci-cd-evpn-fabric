@@ -1,0 +1,7 @@
+underlay_as: 65000
+evpn_as: 65001
+vlan_ids:
+  - {id: 10, name: "WEB"}
+  - {id: 20, name: "APP"}
+
+vxlan_anycast_loopback: "192.168.255.10"
