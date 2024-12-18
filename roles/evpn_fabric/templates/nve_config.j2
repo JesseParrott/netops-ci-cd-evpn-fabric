@@ -1,0 +1,7 @@
+interface nve1
+  no shutdown
+  source-interface loopback{{ nve_source_loopback }}
+  member vni {{ vlan_ids[0].id }} 
+    suppress-arp
+  member vni {{ vlan_ids[1].id }} 
+    suppress-arp
