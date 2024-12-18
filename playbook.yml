@@ -1,0 +1,15 @@
+---
+- name: Deploy EVPN VXLAN Fabric
+  hosts: spines:leafs
+  gather_facts: no
+  roles:
+    - evpn_fabric
+
+handlers:
+  - name: apply_config
+    ios_config:
+      src: "{{ item }}"
+    with_items:
+      - flash:/vlan_config.cfg
+      - flash:/bgp_config.cfg
+      - flash:/nve_config.cfg
